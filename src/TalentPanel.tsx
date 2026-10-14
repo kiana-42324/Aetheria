@@ -1,0 +1,4 @@
+import type {Game} from './types';
+import {statNames} from './data/world';
+import {talentLevel,talentLabels,talentMultipliers} from './talents';
+export function TalentPanel({g}:{g:Game}){return <details className="talent-panel" open={g.phase==='birth'?true:undefined}><summary>선천적 재능 · 1~5단계</summary><div className="talent-grid">{statNames.map(s=>{const level=talentLevel(g,s);return <div key={s}><span>{s}</span><b title={`${talentLabels[level]} · 성장 ${talentMultipliers[level]}배`}>{level}<small>/5</small></b><span className="talent-dots" aria-hidden="true">{'●'.repeat(level)}{'○'.repeat(5-level)}</span></div>})}</div><p>재능은 평생 유지되며 능력치의 성장 속도에 적용됩니다. 현재 전투 피해와 성공률은 실제 능력치로 결정됩니다.</p><p>1단계 ×0.6 · 2단계 ×0.8 · 3단계 ×1 · 4단계 ×1.25 · 5단계 ×1.5<br/>종족 보정과 높은 능력치에서의 성장 둔화도 함께 적용됩니다.</p>{(g.talentOrigin==='legacy'||!g.talents)&&<p>기존 인생은 기본 3단계로 보완하여 이전 성장률을 유지합니다.</p>}</details>}

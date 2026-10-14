@@ -1,0 +1,3 @@
+import {portraitUrl} from './data/portraits';
+import {races} from './data/world';
+export function Portrait({race,sex,variant='character',caption=true}:{race:number;sex:string;variant?:'birth'|'character'|'codex'|'ending'|'archive';caption?:boolean}){return <figure className={`race-portrait portrait-${variant}`} title={`${races[race].name} ${sex}의 성인 대표 초상 — 실제 나이·직업·신분을 나타내지 않습니다.`}><img src={portraitUrl(race,sex)} alt={`${races[race].name} ${sex} 성인 대표 초상`} width={640} height={640} loading={variant==='codex'||variant==='archive'?'lazy':'eager'} decoding="async"/>{caption&&<figcaption>{variant==='codex'?`${sex} · 성인 대표`:'종족·성별 대표 초상'}</figcaption>}</figure>}

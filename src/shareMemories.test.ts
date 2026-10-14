@@ -1,0 +1,22 @@
+const assert={ok:(v:unknown)=>{if(!v)throw Error('Assertion failed')},equal:(a:unknown,b:unknown)=>{if(a!==b)throw Error('Not equal')},deepEqual:(a:unknown,b:unknown)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error('Not deeply equal')}};
+import {shareMemories} from './shareMemories';
+import {events} from './data/events';
+import type {Entry} from './types';
+const entry=(age:number,kind='relationship',title=`사건 ${age}`):Entry=>({age,year:500+age,kind,title,text:`${age}세의 기억`});
+const boss=events.find(e=>e.rareChance)!;
+const log=[entry(5,'growth'),entry(18,'job'),entry(35,'choice',boss.title),entry(50,'career'),...Array.from({length:20},(_,i)=>entry(60+i)),entry(90,'death')];
+const original=JSON.stringify(log);
+const selected=shareMemories({age:90,log});
+assert.equal(selected.length,4);
+assert.ok(selected.some(e=>e.age<30));
+assert.ok(selected.some(e=>e.age>=30&&e.age<60));
+assert.ok(selected.some(e=>e.age>=60));
+assert.ok(selected.some(e=>e.title===boss.title));
+assert.deepEqual(selected.map(e=>e.age),selected.map(e=>e.age).sort((a,b)=>a-b));
+assert.equal(JSON.stringify(log),original);
+assert.deepEqual(shareMemories({age:0,log:[]}),[]);
+assert.equal(shareMemories({age:5,log:[entry(2),entry(2),entry(5,'death')]}).length,1);
+// Long-lived races use proportions of the lived life, not fixed human ages.
+const long=shareMemories({age:500,log:[entry(25),entry(180),entry(400),entry(450,'career'),entry(470)]});
+assert.ok(long.some(e=>e.age===25)&&long.some(e=>e.age===180)&&long.some(e=>e.age===400||e.age===450));
+console.log('Share memories: life coverage, boss priority, chronology, deduplication, short/long lives and immutability passed.');

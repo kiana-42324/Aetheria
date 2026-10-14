@@ -1,0 +1,18 @@
+import type {Talents} from './talents';
+import type {Battle} from './battle';
+export type Stat='체력'|'지능'|'민첩'|'매력'|'마력'|'정신력';
+export type Values=Record<Stat,number>;
+export type Status='건강'|'행복'|'재산'|'명성'|'스트레스';
+export type Stage='유년기'|'청소년기'|'성인기'|'노년기';
+export interface NPC {sex?:string;independent?:boolean;adultSinceTurn?:number;lastTalkTurn?:number;id:number;name:string;race:number;age:number;relation:string;job:string;affection:number;alive:boolean;history:string[];lastContact?:number}
+export interface Condition {canMarry?:boolean;canConceive?:boolean;stage?:Stage[];race?:number;country?:number;job?:string[];rank?:number;flag?:string;notFlag?:string;stat?:[Stat,number];wealth?:number;education?:number;world?:string;relation?:string;affection?:number;flags?:string[];since?:[string,number];experience?:number;debt?:number;maxDebt?:number;combatPower?:number;health?:number}
+export interface Effect {marry?:boolean;pregnant?:boolean;rankSet?:number;stats?:Partial<Values>;state?:Partial<Record<Status,number>>;flag?:string;job?:string;rank?:number;education?:number;relation?:string;affection?:number;death?:string;travel?:boolean;retire?:boolean;org?:string;path?:string;milestone?:string;debt?:number;asset?:string;bond?:'reconcile'|'separate'}
+export interface Choice {text:string;hint?:string;combat?:boolean;condition?:Condition;stat?:Stat;difficulty?:number;bonus?:number;tag?:'magic'|'craft'|'hunt'|'combat';success:Effect;failure?:Effect;ok:string;fail?:string}
+export interface Event {activity?:string;reputation?:{fame:number;rank?:number;job?:string};id:string;title:string;description:string;category:string;condition?:Condition;weight:number;once?:boolean;chain?:string;adventure?:boolean;rareChance?:number;choices:Choice[]}
+export interface Entry {year:number;age:number;title:string;text:string;kind:string}
+export interface NationState {economy:number;security:number;education:number;military:number;stability:number;event:string;ruler:string;relations:number[]}
+export interface Game {pendingActivity?:{id:string;destination?:number;person?:{id:number;action:RelationAction}};eventFlow?:'primary'|'random';familyVersion?:1;familyDebtTurns?:number;socialUses?:{talk?:number;help?:number};pregnancy?:{motherId:number|'player';partnerId:number;dueTurn:number};talents?:Talents;talentOrigin?:'birth'|'legacy';combat?:Battle;adventureTier?:1|2|3;battleReward?:{achievement:string;job:string};usedNames?:string[];version:1;revision:2;eventNpcId:number|null;debt:number;careers:Record<string,Career>;flagTurns:Record<string,number>;assets:string[];streak:number;lastActivityId:string;finance:Finance;metrics:LifeMetrics;epitaph:string;endingReasons:string[];id:string;seed:number;name:string;race:number;sex:string;country:number;birthCountry:number;region:string;rank:number;birthRank:number;birthYear:number;year:number;age:number;stats:Values;state:Record<Status,number>;job:string;education:number;org:string;retired:boolean;npcs:NPC[];world:NationState[];flags:string[];seen:string[];log:Entry[];phase:'birth'|'activity'|'event'|'result'|'dead';eventId:string|null;result:string;delta:string[];cause:string;ending:string;turns:number;lastActivity:string}
+export interface Career {years:number;path:string;milestones:string[]}
+export interface Finance {income:number;expenses:number;interest:number;repaid:number;years:number}
+export interface LifeMetrics {activities:Record<string,number>;income:number;expenses:number;repaid:number;maxDebt:number;workYears:number;joyTotal:number;stressTotal:number;observations:number;interactions:number;successes:number;failures:number;visited:number[];memories:string[];legacyBaseline:boolean}
+export type RelationAction='talk'|'help'|'learn'|'remember';
